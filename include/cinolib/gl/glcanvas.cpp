@@ -680,7 +680,6 @@ void GLcanvas::key_event(GLFWwindow *window, int key, int /*scancode*/, int acti
             }
         }
         v->update_GL_matrices();
-        v->draw();
     }
 }
 
@@ -794,7 +793,6 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
             trackball_to_rotations(v->trackball.last_click_3d, click_3d, axis, angle);
             v->camera.rotate(angle,axis);
             v->update_GL_matrices();
-            v->draw();
         }
         v->trackball.last_click_2d = click_2d;
         v->trackball.last_click_3d = click_3d;
@@ -810,7 +808,6 @@ void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
             delta *= v->camera.scene_radius * 0.01;
             v->camera.translate(vec3d(-delta.x(), delta.y(), 0));
             v->update_GL_matrices();
-            v->draw();
         }
         v->trackball.last_click_2d = click;
     }

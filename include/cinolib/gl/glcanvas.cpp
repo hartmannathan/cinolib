@@ -227,19 +227,25 @@ void GLcanvas::refit_scene()
 {
     // update camera scene parameters
     camera.scene_center = vec3d(0.0);
-    camera.scene_radius = 0;
     uint count = 0;
     for(auto obj : drawlist)
     {
         if(obj->scene_radius()>0)
         {
             camera.scene_center += obj->scene_center();
-            camera.scene_radius += obj->scene_radius();
             ++count;
         }
     }
     camera.scene_center /= static_cast<double>(count);
-    camera.scene_radius /= static_cast<double>(count);
+    camera.scene_radius = 0;
+    for(auto obj : drawlist)
+    {
+        if(obj->scene_radius()>0)
+        {
+            double d = camera.scene_center.dist(obj->scene_center());
+            camera.scene_radius = std::max(camera.scene_radius, d+obj->scene_radius());
+        }
+    }
 
     // update camera matrices and pass them to the GL system
     camera.reset_matrices();
@@ -280,7 +286,7 @@ void GLcanvas::update_GL_projection() const
 CINO_INLINE
 void GLcanvas::draw()
 {
-    glfwMakeContextCurrent(window);    
+    glfwMakeContextCurrent(window);
     glClearColor(color_background.r,
                  color_background.g,
                  color_background.b,
@@ -438,10 +444,10 @@ void GLcanvas::draw_side_bar()
             item->draw();
             ImGui::TreePop();
         }
-    }    
+    }
     // this allows the user to interactively resize the width of the side bar
     side_bar_width = ImGui::GetWindowWidth() / camera.width;
-    ImGui::End();        
+    ImGui::End();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -770,7 +776,7 @@ void GLcanvas::mouse_button_event(GLFWwindow *window, int button, int action, in
 
 CINO_INLINE
 void GLcanvas::cursor_event(GLFWwindow *window, double x_pos, double y_pos)
-{    
+{
     // if visual controls claim the event, let them handle it
     if(ImGui::GetIO().WantCaptureMouse) return;
 

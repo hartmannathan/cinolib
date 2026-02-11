@@ -117,6 +117,7 @@ template<uint r, uint c, typename T> CINO_INLINE void mat_eigendec        (const
 template<uint r, uint c, typename T> CINO_INLINE void mat_eigenval        (const T m[][c], T eval[]);
 template<uint r, uint c, typename T> CINO_INLINE void mat_eigenvec        (const T m[][c], T evec[][c]);
 template<uint r, uint c, typename T> CINO_INLINE void mat_svd             (const T m[][c], T U[][r], T S[], T V[][c]);
+template<uint r, uint c, typename T> CINO_INLINE void mat_qr              (const T m[][c], T Q[][r], T R[][c]);
 template<uint d,         typename T> CINO_INLINE void mat_closest_orth_mat(const T m[][d], T n[][d], const bool force_pos_det);
 template<uint d,         typename T> CINO_INLINE void mat_solve_Cramer    (const T m[][d], const T b[], T x[]);
 template<uint r, uint c, typename T> CINO_INLINE void mat_copy            (const T m[][c], T n[][c]);

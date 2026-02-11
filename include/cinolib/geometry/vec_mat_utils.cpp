@@ -930,6 +930,22 @@ void mat_svd(const T m[][c], T U[][r], T S[], T V[][c])
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+template<uint r, uint c, typename T>
+CINO_INLINE
+void mat_qr(const T m[][c], T Q[][r], T R[][c])
+{
+    assert(r==c);
+    typedef Eigen::Matrix<T,r,c,Eigen::RowMajor> M;
+    Eigen::Map<const M> tmp(m[0]);
+    Eigen::HouseholderQR<M> qr(tmp);
+    M _Q = qr.householderQ();
+    M _R = qr.matrixQR().template triangularView<Eigen::Upper>();
+    vec_copy<r*r,T>(_Q.data(), Q[0]);
+    vec_copy<r*c,T>(_R.data(), R[0]);
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 template<uint d, typename T>
 CINO_INLINE
 void mat_closest_orth_mat(const T m[][d], T n[][d], const bool force_pos_det)
